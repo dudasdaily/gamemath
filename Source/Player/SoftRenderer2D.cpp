@@ -92,6 +92,7 @@ void SoftRenderer::Render2D()
 	float rad = 0.f;
 	static float increment = 0.001f;
 	static std::vector<Vector2> hearts;
+	HSVColor hsv = HSVColor(0.f, 0.85f, 1.f);
 
 	// 하트를 구성하는 점 생성
 	if (hearts.empty())
@@ -109,9 +110,13 @@ void SoftRenderer::Render2D()
 		}
 	}
 
+	rad = 0.f; // 각도에 따라 HSV색상을 다르게 주기 위해 rad을 0으로 초기화 한다!
+
 	for (auto const& v : hearts)
 	{
-		r.DrawPoint(v * currentScale + currentPosition, LinearColor::Blue);
+		hsv.H = rad / Math::TwoPI; // HSV에서 Hue가 [0.f, 1.f]의 값을 가지기 때문에, [0, 2pi]의 값을 가지는 rad를 2pi로 나눠서 범위를 맞춰준다!
+		r.DrawPoint(v * currentScale + currentPosition, hsv.ToLinearColor());
+		rad += increment;
 	}
 
 	// 현재 위치와 스케일을 화면에 출력
