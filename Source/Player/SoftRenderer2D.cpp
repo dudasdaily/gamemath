@@ -53,7 +53,7 @@ void SoftRenderer::LoadScene2D()
 }
 
 // 게임 로직과 렌더링 로직이 공유하는 변수
-
+Vector2 currentPosition;
 
 // 게임 로직을 담당하는 함수
 void SoftRenderer::Update2D(float InDeltaSeconds)
@@ -63,7 +63,18 @@ void SoftRenderer::Update2D(float InDeltaSeconds)
 	const InputManager& input = g.GetInputManager();
 
 	// 게임 로직의 로컬 변수
+	static float moveSpeed = 100.f;
 
+	if (input.IsPressed(InputButton::Space))
+	{
+		currentPosition = Vector2::Zero;
+		return;
+	}
+
+	Vector2 inputVector = Vector2(input.GetAxis(InputAxis::XAxis), input.GetAxis(InputAxis::YAxis));
+	Vector2 deltaPos = inputVector * moveSpeed * InDeltaSeconds;
+	
+	currentPosition += deltaPos;
 }
 
 // 렌더링 로직을 담당하는 함수
@@ -77,7 +88,26 @@ void SoftRenderer::Render2D()
 	DrawGizmo2D();
 
 	// 렌더링 로직의 로컬 변수
+	static float lineLength = 500.f;
+		
+	// currentPosition 렌더링
+	// 선 그리기
+	Vector2 lineStart = currentPosition * (-lineLength);
+	Vector2 lineEnd = currentPosition * lineLength;
+	r.DrawLine(lineStart, lineEnd, LinearColor::Gray);
 
+	// currentPosition 위치에 점 찍기!
+	r.DrawPoint(currentPosition, LinearColor::Black);
+	r.DrawPoint(currentPosition + Vector2::UnitX, LinearColor::Black);
+	r.DrawPoint(currentPosition - Vector2::UnitX, LinearColor::Black);
+	r.DrawPoint(currentPosition + Vector2::UnitY, LinearColor::Black);
+	r.DrawPoint(currentPosition - Vector2::UnitY, LinearColor::Black);
+	r.DrawPoint(currentPosition + Vector2::One, LinearColor::Black);
+	r.DrawPoint(currentPosition - Vector2::One, LinearColor::Black);
+	r.DrawPoint(currentPosition + Vector2(1.f, -1.f), LinearColor::Black);
+	r.DrawPoint(currentPosition - Vector2(1.f, -1.f), LinearColor::Black);
+
+	r.PushStatisticText("Coordinate : " + currentPosition.ToString());
 }
 
 // 메시를 그리는 함수
