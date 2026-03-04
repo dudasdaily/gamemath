@@ -67,12 +67,21 @@ void SoftRenderer::Update2D(float InDeltaSeconds)
 	static float moveSpeed = 100.f;
 	static float scaleMin = 5.f;
 	static float scaleMax = 20.f;
+	static float duration = 3.f;
+	static float elapsedTime = 0.f;
 
 	Vector2 inputVector = Vector2(input.GetAxis(InputAxis::XAxis), input.GetAxis(InputAxis::YAxis)).GetNormalize();
 	Vector2 deltaPosition = inputVector * moveSpeed * InDeltaSeconds;
 
+	elapsedTime += InDeltaSeconds;
+	elapsedTime = Math::FMod(elapsedTime, duration);
+
+	float currentRad = (elapsedTime / duration) * Math::TwoPI;
+	float alpha = (sinf(currentRad) + 1) * 0.5f;
+
 	// 물체의 최종 상태 설정
 	currentPosition += deltaPosition;
+	currentScale = Math::Lerp(scaleMin, scaleMax, alpha);
 }
 
 // 렌더링 로직을 담당하는 함수
