@@ -65,7 +65,7 @@ void SoftRenderer::Update2D(float InDeltaSeconds)
 	// 게임 로직의 로컬 변수
 	static float moveSpeed = 100.f;
 
-	Vector2 inputVector = Vector2(input.GetAxis(InputAxis::XAxis), input.GetAxis(InputAxis::YAxis));
+	Vector2 inputVector = Vector2(input.GetAxis(InputAxis::XAxis), input.GetAxis(InputAxis::YAxis)).GetNormalize();
 	Vector2 deltaPosition = inputVector * moveSpeed * InDeltaSeconds;
 
 	// 물체의 최종 상태 설정
@@ -83,6 +83,29 @@ void SoftRenderer::Render2D()
 	DrawGizmo2D();
 
 	// 렌더링 로직의 로컬 변수
+	static float radius = 50.f;
+	std::vector<Vector2> circles; // 원에 해당하는 벡터들의 집합
+
+	// 원을 둘러싼 사각형 중에서 원에 속하는 벡터들을 골라냄!
+	if (circles.empty())
+	{
+		for (float x = -radius; x <= radius; x++)
+		{
+			for (float y = -radius; y <= radius; y++)
+			{
+				Vector2 candidate(x, y);
+				float candidateSize = candidate.SizeSquared();
+
+				if (candidateSize <= radius * radius)
+					circles.push_back(candidate + currentPosition);
+			}
+		}
+	}
+
+	for (Vector2 point : circles)
+	{
+		r.DrawPoint(point, LinearColor::Red);
+	}
 
 }
 
