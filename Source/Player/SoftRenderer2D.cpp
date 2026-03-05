@@ -97,11 +97,30 @@ void SoftRenderer::Render2D()
 		}
 	}
 
+	// 화면 대각선의 절반 벡터
+	static float maxLength = Vector2(_ScreenSize.X, _ScreenSize.Y).Size() * 0.5f;
+
 	// 사각형 그리기
 	HSVColor hsv(0.f, 1.f, 0.85f);
 	for (auto const& v : squares)
 	{
-		r.DrawPoint(v, hsv.ToLinearColor());
+		Vector2 polarV = v.ToPolarCoordinate();
+		
+		if (polarV.Y < 0.f)
+		{
+			polarV.Y += Math::TwoPI; // [-pi, pi]인 극좌표계의 각도를 [0, 2pi]로 맞춰줌!
+		}
+
+		hsv.H = polarV.Y / Math::TwoPI; // 극좌표의 각을 [0, 1]사이로 맵핑해서 점의 색상을 지정해줌!
+
+		float ratio = polarV.X / maxLength; // 회전시킬 비율
+		float weight = Math::Lerp(1.f, 5.f, ratio);
+
+		polarV.Y += Math::Deg2Rad(currentDegree) * weight; // 입력으로 받은 각도에 1 ~ 5 사이의 weight를 곱해줘서 극좌표계의 각도를 조정!
+		
+		Vector2 resultV = polarV.ToCartesianCoordinate();
+
+		r.DrawPoint(resultV, hsv.ToLinearColor());
 	}
 
 	// 현재 각도를 화면에 출력
