@@ -113,13 +113,31 @@ void SoftRenderer::Render2D()
 			hearts.push_back(Vector2(x, y));
 		}
 	}
+	
+	// 스케일 변환 행렬
+	Vector3 sBasis1 = Vector3(currentScale, 0, 0);
+	Vector3 sBasis2 = Vector3(0, currentScale, 0);
+	Vector3 sBasis3 = Vector3(0, 0, 1);
+	Matrix3x3 affineTransform = Matrix3x3(sBasis1, sBasis2, sBasis3);
+
+	// 이동변환 행렬
+	Vector3 tBasis1 = Vector3(1, 0, 0);
+	Vector3 tBasis2 = Vector3(0, 1, 0);
+	Vector3 tBasis3 = Vector3(currentPosition.X, currentPosition.Y, 1);
+	affineTransform = affineTransform * Matrix3x3(tBasis1, tBasis2, tBasis3);
 
 	// 각 값을 초기화한 후 동일하게 증가시키면서 색상 값을 지정
 	rad = 0.f;
 	for (auto const& v : hearts)
 	{
 		hsv.H = rad / Math::TwoPI;
-		r.DrawPoint(v, hsv.ToLinearColor());
+		
+		Vector3 affineV = Vector3(v.X, v.Y, 1);
+		Vector3 resultV = affineTransform * affineV;
+		
+		Vector2 finalV = resultV.ToVector2();
+
+		r.DrawPoint(finalV, hsv.ToLinearColor());
 		rad += increment;
 	}
 
