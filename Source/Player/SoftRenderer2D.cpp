@@ -4,24 +4,24 @@
 #include <random>
 using namespace CK::DD;
 
-// °ÝÀÚ¸¦ ±×¸®´Â ÇÔ¼ö
+// ï¿½ï¿½ï¿½Ú¸ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 void SoftRenderer::DrawGizmo2D()
 {
     auto& r = GetRenderer();
     const auto& g = Get2DGameEngine();
 
-    // ±×¸®µå »ö»ó
+    // ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     LinearColor gridColor(LinearColor(0.8f, 0.8f, 0.8f, 0.3f));
 
-    // ºäÀÇ ¿µ¿ª °è»ê
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½?
     Vector2 viewPos = g.GetMainCamera().GetTransform().GetPosition();
     Vector2 extent = Vector2(_ScreenSize.X * 0.5f, _ScreenSize.Y * 0.5f);
 
-    // ÁÂÃø ÇÏ´Ü¿¡¼­ºÎÅÍ °ÝÀÚ ±×¸®±â
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ï´Ü¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
     int xGridCount = _ScreenSize.X / _Grid2DUnit;
     int yGridCount = _ScreenSize.Y / _Grid2DUnit;
 
-    // ±×¸®µå°¡ ½ÃÀÛµÇ´Â ÁÂÇÏ´Ü ÁÂÇ¥ °ª °è»ê
+    // ï¿½×¸ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ÛµÇ´ï¿½ ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Ç¥ ï¿½ï¿½ ï¿½ï¿½ï¿½?
     Vector2 minPos = viewPos - extent;
     Vector2 minGridPos = Vector2(ceilf(minPos.X / (float)_Grid2DUnit), ceilf(minPos.Y / (float)_Grid2DUnit)) * (float)_Grid2DUnit;
     ScreenPoint gridBottomLeft = ScreenPoint::ToScreenCoordinate(_ScreenSize, minGridPos - viewPos);
@@ -41,23 +41,23 @@ void SoftRenderer::DrawGizmo2D()
     r.DrawFullVerticalLine(worldOrigin.X, LinearColor::Green);
 }
 
-// °ÔÀÓ ¿ÀºêÁ§Æ® ¸ñ·Ï
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½?
 static const std::string PlayerGo("Player");
 
-// ÃÖÃÊ ¾À ·ÎµùÀ» ´ã´çÇÏ´Â ÇÔ¼ö
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½? ï¿½Ô¼ï¿½
 void SoftRenderer::LoadScene2D()
 {
-    // ÃÖÃÊ ¾À ·Îµù¿¡¼­ »ç¿ëÇÏ´Â ¸ðµâ ³» ÁÖ¿ä ·¹ÆÛ·±½º
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½? ï¿½ï¿½ï¿½? ï¿½ï¿½ ï¿½Ö¿ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½
     auto& g = Get2DGameEngine();
 
-    // ÇÃ·¹ÀÌ¾îÀÇ »ý¼º°ú ¼³Á¤
+    // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     constexpr float playerScale = 30.f;
     GameObject& goPlayer = g.CreateNewGameObject(PlayerGo);
     goPlayer.SetMesh(GameEngine::QuadMesh);
     goPlayer.GetTransform().SetScale(Vector2::One * playerScale);
     goPlayer.SetColor(LinearColor::Red);
 
-    // 100°³ÀÇ ¹è°æ °ÔÀÓ ¿ÀºêÁ§Æ® »ý¼º°ú ¼³Á¤
+    // 100ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     char name[64];
     constexpr float squareScale = 20.f;
     std::mt19937 generator(0);
@@ -73,14 +73,14 @@ void SoftRenderer::LoadScene2D()
     }
 }
 
-// °ÔÀÓ ·ÎÁ÷À» ´ã´çÇÏ´Â ÇÔ¼ö
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½? ï¿½Ô¼ï¿½
 void SoftRenderer::Update2D(float InDeltaSeconds)
 {
-    // °ÔÀÓ ·ÎÁ÷¿¡¼­ »ç¿ëÇÏ´Â ¸ðµâ ³» ÁÖ¿ä ·¹ÆÛ·±½º
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½? ï¿½ï¿½ï¿½? ï¿½ï¿½ ï¿½Ö¿ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½
     auto& g = Get2DGameEngine();
     const InputManager& input = g.GetInputManager();
 
-    // °ÔÀÓ ·ÎÁ÷ÀÇ ·ÎÄÃ º¯¼ö
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     static float moveSpeed = 200.f;
     static float rotateSpeed = 180.f;
     static float scaleMin = 15.f;
@@ -89,17 +89,17 @@ void SoftRenderer::Update2D(float InDeltaSeconds)
     static float minDistance = 1.f;
     static float lerpSpeed = 2.f;
 
-    // ÇÃ·¹ÀÌ¾î¿¡ ´ëÇÑ ÁÖ¿ä ·¹ÆÛ·±½º
+    // ï¿½Ã·ï¿½ï¿½Ì¾î¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¿ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½
     GameObject& goPlayer = g.GetGameObject(PlayerGo);
     TransformComponent& transform = goPlayer.GetTransform();
 
-    // ÀÔ·Â¿¡ µû¸¥ ÇÃ·¹ÀÌ¾î À§Ä¡¿Í Å©±âÀÇ º¯°æ
+    // ï¿½Ô·Â¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Å©ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     transform.AddPosition(Vector2(input.GetAxis(InputAxis::XAxis), input.GetAxis(InputAxis::YAxis)).GetNormalize() * moveSpeed * InDeltaSeconds);
     float newScale = Math::Clamp(transform.GetScale().X + scaleSpeed * input.GetAxis(InputAxis::ZAxis) * InDeltaSeconds, scaleMin, scaleMax);
     transform.SetScale(Vector2::One * newScale);
     transform.AddRotation(input.GetAxis(InputAxis::WAxis) * rotateSpeed * InDeltaSeconds);
 
-    // ÇÃ·¹ÀÌ¾î¸¦ µû¶ó´Ù´Ï´Â Ä«¸Þ¶óÀÇ Æ®·£½ºÆû
+    // ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ ï¿½ï¿½ï¿½ï¿½Ù´Ï´ï¿½? Ä«ï¿½Þ¶ï¿½ï¿½ï¿½ Æ®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     TransformComponent& cameraTransform = g.GetMainCamera().GetTransform();
     Vector2 playerPos = transform.GetPosition();
     Vector2 cameraPos = cameraTransform.GetPosition();
@@ -115,40 +115,40 @@ void SoftRenderer::Update2D(float InDeltaSeconds)
     }
 }
 
-// ·»´õ¸µ ·ÎÁ÷À» ´ã´çÇÏ´Â ÇÔ¼ö
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½? ï¿½Ô¼ï¿½
 void SoftRenderer::Render2D()
 {
-    // ·»´õ¸µ ·ÎÁ÷¿¡¼­ »ç¿ëÇÏ´Â ¸ðµâ ³» ÁÖ¿ä ·¹ÆÛ·±½º
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½? ï¿½ï¿½ï¿½? ï¿½ï¿½ ï¿½Ö¿ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½
     auto& r = GetRenderer();
     const auto& g = Get2DGameEngine();
     const auto& texture = g.GetTexture(GameEngine::BaseTexture);
 
-    // ¹è°æ¿¡ °ÝÀÚ ±×¸®±â
+    // ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
     DrawGizmo2D();
 
-    // ·»´õ¸µ ·ÎÁ÷ÀÇ ·ÎÄÃ º¯¼ö
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     size_t totalObjectCount = g.GetScene().size();
     Matrix3x3 viewMatrix = g.GetMainCamera().GetViewMatrix();
 
-    // ¾ÀÀ» ±¸¼ºÇÏ´Â ¸ðµç °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ ¼øÈ¸
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½È¸
     for (auto it = g.SceneBegin(); it != g.SceneEnd(); ++it)
     {
-        // °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ ·¹ÆÛ·±½º¸¦ ¾ò±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½?
         const GameObject& gameObject = *(*it);
         if (!gameObject.HasMesh() || !gameObject.IsVisible())
         {
             continue;
         }
 
-        // ·»´õ¸µ¿¡ ÇÊ¿äÇÑ °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ ÁÖ¿ä ·¹ÆÛ·±½º¸¦ ¾ò±â
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ö¿ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½?
         const Mesh& mesh = g.GetMesh(gameObject.GetMeshKey());
         const TransformComponent& transform = gameObject.GetTransform();
         Matrix3x3 finalMatrix = viewMatrix * transform.GetModelingMatrix();
 
-        // °ÔÀÓ ¿ÀºêÁ§Æ®ÀÇ ·»´õ¸µ ¼öÇà
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         DrawMesh2D(mesh, finalMatrix, gameObject.GetColor());
 
-        // ÇÃ·¹ÀÌ¾îÀÇ Á¤º¸¸¦ È­¸é¿¡ Ãâ·Â
+        // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È­ï¿½é¿¡ ï¿½ï¿½ï¿½?
         if (gameObject == PlayerGo)
         {
             r.PushStatisticText("Player Position : " + transform.GetPosition().ToString());
@@ -158,15 +158,15 @@ void SoftRenderer::Render2D()
     }
 }
 
-// ¸Þ½Ã¸¦ ±×¸®´Â ÇÔ¼ö
+// ï¿½Þ½Ã¸ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 void SoftRenderer::DrawMesh2D(const class DD::Mesh& InMesh, const Matrix3x3& InMatrix, const LinearColor& InColor)
 {
-    // ¸Þ½ÃÀÇ ±¸Á¶¸¦ ÆÄ¾ÇÇÏ±â À§ÇÑ ·ÎÄÃ º¯¼ö
+    // ï¿½Þ½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ä¾ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     size_t vertexCount = InMesh.GetVertices().size();
     size_t indexCount = InMesh.GetIndices().size();
     size_t triangleCount = indexCount / 3;
 
-    // ¸Þ½Ã Á¤º¸¸¦ ·»´õ·¯°¡ »ç¿ëÇÒ Á¤Á¡ ¹öÆÛ¿Í ÀÎµ¦½º ¹öÆÛ·Î º¯È¯
+    // ï¿½Þ½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½Îµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ ï¿½ï¿½È¯
     std::vector<Vertex2D> vertices(vertexCount);
     std::vector<size_t> indice(InMesh.GetIndices());
     for (size_t vi = 0; vi < vertexCount; ++vi)
@@ -183,10 +183,10 @@ void SoftRenderer::DrawMesh2D(const class DD::Mesh& InMesh, const Matrix3x3& InM
         }
     }
 
-    // Á¤Á¡ º¯È¯ ÁøÇà
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯ ï¿½ï¿½ï¿½ï¿½
     VertexShader2D(vertices, InMatrix);
 
-    // ±×¸®±â¸ðµå ¼³Á¤
+    // ï¿½×¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     FillMode fm = FillMode::None;
     if (InMesh.HasColor())
     {
@@ -197,7 +197,7 @@ void SoftRenderer::DrawMesh2D(const class DD::Mesh& InMesh, const Matrix3x3& InM
         fm |= FillMode::Texture;
     }
 
-    // ¸Þ½Ã¸¦ »ï°¢ÇüÀ¸·Î ÂÉ°³¼­ °¢°¢ ±×¸®±â
+    // ï¿½Þ½Ã¸ï¿½ ï¿½ï°¢ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½É°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
     for (int ti = 0; ti < triangleCount; ++ti)
     {
         int bi0 = ti * 3, bi1 = ti * 3 + 1, bi2 = ti * 3 + 2;
@@ -206,17 +206,17 @@ void SoftRenderer::DrawMesh2D(const class DD::Mesh& InMesh, const Matrix3x3& InM
     }
 }
 
-// »ï°¢ÇüÀ» ±×¸®´Â ÇÔ¼ö
+// ï¿½ï°¢ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
 void SoftRenderer::DrawTriangle2D(std::vector<DD::Vertex2D>& InVertices, const LinearColor& InColor, FillMode InFillMode)
 {
-    // ·»´õ¸µ ·ÎÁ÷¿¡¼­ »ç¿ëÇÏ´Â ¸ðµâ ³» ÁÖ¿ä ·¹ÆÛ·±½º
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï´ï¿½? ï¿½ï¿½ï¿½? ï¿½ï¿½ ï¿½Ö¿ï¿½ ï¿½ï¿½ï¿½Û·ï¿½ï¿½ï¿½
     auto& r = GetRenderer();
     const GameEngine& g = Get2DGameEngine();
     const Texture& texture = g.GetTexture(GameEngine::BaseTexture);
 
     if (IsWireframeDrawing())
     {
-        // ¿ÍÀÌ¾îÇÁ·¹ÀÓÀ¸·Î ¸Þ½Ã¸¦ ±×¸®±â
+        // ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Þ½Ã¸ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
         LinearColor finalColor = _WireframeColor;
         if (InColor != LinearColor::Error)
         {
@@ -229,22 +229,22 @@ void SoftRenderer::DrawTriangle2D(std::vector<DD::Vertex2D>& InVertices, const L
     }
     else
     {
-        // »ï°¢Çü Ä¥ÇÏ±â
-        // »ï°¢ÇüÀÇ ¿µ¿ª ¼³Á¤
+        // ï¿½ï°¢ï¿½ï¿½ Ä¥ï¿½Ï±ï¿½
+        // ï¿½ï°¢ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Vector2 minPos(Math::Min3(InVertices[0].Position.X, InVertices[1].Position.X, InVertices[2].Position.X), Math::Min3(InVertices[0].Position.Y, InVertices[1].Position.Y, InVertices[2].Position.Y));
         Vector2 maxPos(Math::Max3(InVertices[0].Position.X, InVertices[1].Position.X, InVertices[2].Position.X), Math::Max3(InVertices[0].Position.Y, InVertices[1].Position.Y, InVertices[2].Position.Y));
 
-        // ¹«°ÔÁß½ÉÁÂÇ¥¸¦ À§ÇØ Á¡À» º¤ÅÍ·Î º¯È¯
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ß½ï¿½ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í·ï¿½ ï¿½ï¿½È¯
         Vector2 u = InVertices[1].Position - InVertices[0].Position;
         Vector2 v = InVertices[2].Position - InVertices[0].Position;
 
-        // °øÅë ºÐ¸ð °ª ( uv * uv - uu * vv )
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¸ï¿½ ï¿½ï¿½ ( uv * uv - uu * vv )
         float udotv = u.Dot(v);
         float vdotv = v.Dot(v);
         float udotu = u.Dot(u);
         float denominator = udotv * udotv - vdotv * udotu;
 
-        // ÅðÈ­ »ï°¢ÇüÀÌ¸é ±×¸®±â »ý·«
+        // ï¿½ï¿½È­ ï¿½ï°¢ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (denominator == 0.f)
         {
             return;
@@ -255,13 +255,13 @@ void SoftRenderer::DrawTriangle2D(std::vector<DD::Vertex2D>& InVertices, const L
         ScreenPoint lowerLeftPoint = ScreenPoint::ToScreenCoordinate(_ScreenSize, minPos);
         ScreenPoint upperRightPoint = ScreenPoint::ToScreenCoordinate(_ScreenSize, maxPos);
 
-        // µÎ Á¡ÀÌ È­¸é ¹ÛÀ» ¹þ¾î³ª´Â °æ¿ì Å¬¸®ÇÎ Ã³¸®
+        // ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½î³ªï¿½ï¿½ ï¿½ï¿½ï¿½? Å¬ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
         lowerLeftPoint.X = Math::Max(0, lowerLeftPoint.X);
         lowerLeftPoint.Y = Math::Min(_ScreenSize.Y, lowerLeftPoint.Y);
         upperRightPoint.X = Math::Min(_ScreenSize.X, upperRightPoint.X);
         upperRightPoint.Y = Math::Max(0, upperRightPoint.Y);
 
-        // »ï°¢Çü ¿µ¿ª ³» ¸ðµç Á¡À» Á¡°ËÇÏ°í »öÄ¥
+        // ï¿½ï°¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½? ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½Ä¥
         for (int x = lowerLeftPoint.X; x <= upperRightPoint.X; ++x)
         {
             for (int y = upperRightPoint.Y; y <= lowerLeftPoint.Y; ++y)

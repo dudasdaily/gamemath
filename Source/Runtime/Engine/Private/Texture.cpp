@@ -9,20 +9,37 @@
 Texture::Texture(std::string InFileName)
 {
 	FILE* f = NULL;
+#if defined(_MSC_VER)
 	if (0 != fopen_s(&f, InFileName.c_str(), "rb"))
 	{
 		return;
 	}
+#else
+	f = fopen(InFileName.c_str(), "rb");
+	if (f == NULL)
+	{
+		return;
+	}
+#endif
 	LoadFromFile(f);
 }
 
 Texture::Texture(std::wstring InFileName)
 {
 	FILE* f = NULL;
+#if defined(_MSC_VER)
 	if (0 != _wfopen_s(&f, InFileName.c_str(), L"rb"))
 	{
 		return;
 	}
+#else
+	std::string strPath(InFileName.begin(), InFileName.end());
+	f = fopen(strPath.c_str(), "rb");
+	if (f == NULL)
+	{
+		return;
+	}
+#endif
 	LoadFromFile(f);
 }
 

@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 
 project(MathModule)
 
@@ -70,6 +70,7 @@ include_directories(
 ################################################################################
 # Precompiled Headers
 ################################################################################
+if(MSVC)
 set(ARG_PCH_HEADER Precompiled.h)
 set(ARG_PCH_SOURCE Precompiled.cpp)
 foreach (FILE ${ALL_FILES_REL})
@@ -81,6 +82,7 @@ foreach (FILE ${ALL_FILES_REL})
 	endif()
   endif()
 endforeach(FILE)
+endif()
 
 ################################################################################
 # Library Output Setting

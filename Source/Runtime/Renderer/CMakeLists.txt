@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 
 project(RendererModule)
 
@@ -28,9 +28,9 @@ set(ALL_FILES
     ${THIRDPARTY_FILES}
 	)
 	
-if(TARGET_WINDOWS)
+if(TARGET_WINDOWS OR TARGET_MAC)
 
-	file(GLOB_RECURSE WINDOWS_FILES
+	file(GLOB_RECURSE PLATFORM_FILES
 		${PROJECT_SOURCE_DIR}/Public/${PLATFORM_FOLDER}/*.h
 		${PROJECT_SOURCE_DIR}/Private/${PLATFORM_FOLDER}/*.h
 		${PROJECT_SOURCE_DIR}/Private/${PLATFORM_FOLDER}/*.cpp
@@ -38,7 +38,7 @@ if(TARGET_WINDOWS)
 
 	set(ALL_FILES
 		${ALL_FILES}
-		${WINDOWS_FILES}
+		${PLATFORM_FILES}
 		)
 
 endif()	   	
@@ -76,6 +76,7 @@ include_directories(
 ################################################################################
 # Precompiled Headers
 ################################################################################
+if(MSVC)
 set(ARG_PCH_HEADER Precompiled.h)
 set(ARG_PCH_SOURCE Precompiled.cpp)
 foreach (FILE ${ALL_FILES_REL})
@@ -87,6 +88,7 @@ foreach (FILE ${ALL_FILES_REL})
 	endif()
   endif()
 endforeach(FILE)
+endif()
 
 
 ################################################################################
@@ -104,5 +106,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 # Import Library
 ################################################################################
 target_link_libraries(${PROJECT_NAME} MathModule)
+
+if(TARGET_MAC)
+	find_package(OpenGL REQUIRED)
+	set(FREEGLUT_INCLUDE_DIR /opt/homebrew/opt/freeglut/include)
+	set(FREEGLUT_LIBRARY /opt/homebrew/opt/freeglut/lib/libglut.dylib)
+	target_include_directories(${PROJECT_NAME} PRIVATE ${OPENGL_INCLUDE_DIR} ${FREEGLUT_INCLUDE_DIR})
+	target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${FREEGLUT_LIBRARY})
+endif()
 
 

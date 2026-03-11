@@ -95,7 +95,7 @@ struct Math
 		return X < Min ? Min : X < Max ? X : Max;
 	}
 
-	// ¾ð¸®¾ó ¿£Áø ÄÚµå¿¡¼­ °¡Á®¿È. ÁöÁ¤µÈ °¢µµ¿¡ ´ëÇÑ µÎ »ï°¢ÇÔ¼ö¸¦ ÇÔ²² °¡Á®¿À´Â ÇÔ¼ö. 
+	// ì–¸ë¦¬ì–¼ ì—”ì§„ ì½”ë“œì—ì„œ ê°€ì ¸ì˜´. ì§€ì •ëœ ê°ë„ì— ëŒ€í•œ ë‘ ì‚¼ê°í•¨ìˆ˜ë¥¼ í•¨ê»˜ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜. 
 	static FORCEINLINE constexpr void GetSinCosRad(float& OutSin, float& OutCos, float InRadian)
 	{
 		// Copied from UE4 Source Code
@@ -184,9 +184,10 @@ struct Math
 		return (X - intPortion);
 	}
 
-	// ¾ð¸®¾ó ¿£Áø ÄÚµå¿¡¼­ °¡Á®¿È. °í¼Ó ¿ªÁ¦°ö±Ù °ø½Ä
+	// ì–¸ë¦¬ì–¼ ì—”ì§„ ì½”ë“œì—ì„œ ê°€ì ¸ì˜´. ê³ ì† ì—­ì œê³±ê·¼ ê³µì‹
 	FORCEINLINE static float InvSqrt(float InFloat)
 	{
+#if defined(_MSC_VER)
 		// Performs two passes of Newton-Raphson iteration on the hardware estimate
 		//    v^-0.5 = x
 		// => x^2 = v^-1
@@ -223,6 +224,10 @@ struct Math
 		_mm_store_ss(&temp, X2);
 		return temp;
 	}
+#else
+		return 1.0f / sqrtf(InFloat);
+	}
+#endif
 
 };
 

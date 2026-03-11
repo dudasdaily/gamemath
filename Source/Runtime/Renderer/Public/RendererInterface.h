@@ -7,6 +7,9 @@ namespace CK
 class RendererInterface
 {
 public:
+	virtual ~RendererInterface() = default;
+
+public:
 	virtual bool Init(const ScreenPoint& InSize) = 0;
 	virtual void Shutdown() = 0;
 	virtual bool IsInitialized() const = 0;

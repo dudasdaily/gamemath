@@ -7,6 +7,12 @@
 #include <tchar.h>
 #include "Res/resource.h"
 
+#elif defined(PLATFORM_MAC)
+
+#define GL_SILENCE_DEPRECATION
+#include <GL/freeglut.h>
+#include <OpenGL/gl.h>
+
 #endif
 
 #include "MathHeaders.h"

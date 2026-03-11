@@ -2,7 +2,7 @@
 ## CMake Setting for SoftRenderer 
 ##########################################################
 
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,22 +14,21 @@ project(${MAIN_PROJECT_NAME})
 
 set(RUNTIME_MODULE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Source/Runtime)
 
-if(NOT WIN32)
-	message(FATAL_ERROR "This project only supports windows environment currently.")
-endif()
-
-if(NOT MSVC)
-	message(FATAL_ERROR "This project only supports MSVC project currently.")
+if(WIN32 AND NOT MSVC)
+	message(FATAL_ERROR "This project on Windows only supports MSVC project currently.")
 endif()
 
 set(PLATFORM_DEFINITION PLATFORM_GENERIC)
 set(PLATFORM_FOLDER Generic)
 
-option(TARGET_WINDOWS "Windows Option" ON)
-
-if(TARGET_WINDOWS)
+if(WIN32)
+	set(TARGET_WINDOWS ON)
 	set(PLATFORM_DEFINITION PLATFORM_WINDOWS)
 	set(PLATFORM_FOLDER Windows)
+elseif(APPLE)
+	set(TARGET_MAC ON)
+	set(PLATFORM_DEFINITION PLATFORM_MAC)
+	set(PLATFORM_FOLDER Mac)
 endif()
 
 ################################################################################

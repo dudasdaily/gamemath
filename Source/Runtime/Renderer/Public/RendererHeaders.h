@@ -14,6 +14,8 @@
 #include <windows.h>
 #include "Windows/WindowsGDI.h"
 #include "Windows/WindowsRSI.h"
+#elif defined(PLATFORM_MAC)
+#include "Mac/MacRSI.h"
 #endif
 
 using namespace CK;

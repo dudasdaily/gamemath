@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.5)
 
 project(SoftRendererPlayer)
 
@@ -32,6 +32,18 @@ if(TARGET_WINDOWS)
 		${ALL_FILES}
 		${WINDOWS_FILES}
 		${WINDOWS_RESOURCE_FILES}
+		)
+
+elseif(TARGET_MAC)
+
+	file(GLOB_RECURSE MAC_FILES
+		${PROJECT_SOURCE_DIR}/Private/${PLATFORM_FOLDER}/*.cpp
+		${PROJECT_SOURCE_DIR}/Private/${PLATFORM_FOLDER}/*.h
+		)
+
+	set(ALL_FILES
+		${ALL_FILES}
+		${MAC_FILES}
 		)
 
 endif()	   
@@ -68,6 +80,7 @@ include_directories(
 ################################################################################
 # Precompiled Headers
 ################################################################################
+if(MSVC)
 set(ARG_PCH_HEADER Precompiled.h)
 set(ARG_PCH_SOURCE Precompiled.cpp)
 foreach (FILE ${ALL_FILES})
@@ -80,11 +93,16 @@ foreach (FILE ${ALL_FILES})
 	endif()
   endif()
 endforeach(FILE)
+endif()
 
 ################################################################################
 # Excutable Output Setting
 ################################################################################
-add_executable(${PROJECT_NAME} WIN32 ${ALL_FILES})
+if(TARGET_WINDOWS)
+	add_executable(${PROJECT_NAME} WIN32 ${ALL_FILES})
+else()
+	add_executable(${PROJECT_NAME} ${ALL_FILES})
+endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
 	PREFIX ""
@@ -97,5 +115,13 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 # Import Library
 ################################################################################
 target_link_libraries(${PROJECT_NAME} MathModule RendererModule EngineModule)
+
+if(TARGET_MAC)
+	find_package(OpenGL REQUIRED)
+	set(FREEGLUT_INCLUDE_DIR /opt/homebrew/opt/freeglut/include)
+	set(FREEGLUT_LIBRARY /opt/homebrew/opt/freeglut/lib/libglut.dylib)
+	target_include_directories(${PROJECT_NAME} PRIVATE ${OPENGL_INCLUDE_DIR} ${FREEGLUT_INCLUDE_DIR})
+	target_link_libraries(${PROJECT_NAME} ${OPENGL_LIBRARIES} ${FREEGLUT_LIBRARY})
+endif()
 
 

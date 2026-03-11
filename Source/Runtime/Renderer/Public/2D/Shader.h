@@ -6,18 +6,18 @@ namespace CK
 namespace DD
 {
 
-// Á¤Á¡ º¯È¯ ÄÚµå
+// ì •ì  ë³€í™˜ ì½”ë“œ
 FORCEINLINE void VertexShader2D(std::vector<Vertex2D>& InVertices, const Matrix3x3& InMatrix)
 {
-	// À§Ä¡ °ª¿¡ ÃÖÁ¾ Çà·ÄÀ» Àû¿ëÇØ º¯È¯
+	// ìœ„ì¹˜ ê°’ì— ìµœì¢… í–‰ë ¬ì„ ì ìš©í•´ ë³€í™˜
 	for (Vertex2D& v : InVertices)
 	{
 		v.Position = InMatrix * v.Position;
 	}
 }
 
-// ÇÈ¼¿ º¯È¯ ÄÚµå
-FORCEINLINE LinearColor FragmentShader2D(LinearColor& InColor, const LinearColor& InColorParam)
+// í”½ì…€ ë³€í™˜ ì½”ë“œ
+FORCEINLINE LinearColor FragmentShader2D(const LinearColor& InColor, const LinearColor& InColorParam)
 {
 	return InColor * InColorParam;
 }
