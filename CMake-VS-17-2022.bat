@@ -21,7 +21,7 @@ cd Project
 @echo Running CMAKE script.
 @echo:
 
-cmake -G "Visual Studio 17 2022" ..\
+cmake -G "Visual Studio 18 2026" ..\
 
 @echo:
 @echo Done!
