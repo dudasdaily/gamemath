@@ -1,0 +1,11 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/dudas/source/repos/dudasdaily/gamemath/out/build/x64-Debug/cmake_install.cmake",
+		"C:/Users/dudas/source/repos/dudasdaily/gamemath/out/build/x64-Debug/Source/Runtime/Math/cmake_install.cmake",
+		"C:/Users/dudas/source/repos/dudasdaily/gamemath/out/build/x64-Debug/Source/Runtime/Renderer/cmake_install.cmake",
+		"C:/Users/dudas/source/repos/dudasdaily/gamemath/out/build/x64-Debug/Source/Runtime/Engine/cmake_install.cmake",
+		"C:/Users/dudas/source/repos/dudasdaily/gamemath/out/build/x64-Debug/Source/Player/cmake_install.cmake"
+	],
+	"Parallel" : false
+}

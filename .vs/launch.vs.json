@@ -1,0 +1,12 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "SoftRendererPlayer.exe (C:\\Users\\dudas\\source\\repos\\dudasdaily\\gamemath\\Output\\Windows\\Binary\\SoftRendererPlayer.exe)",
+      "name": "SoftRendererPlayer.exe (C:\\Users\\dudas\\source\\repos\\dudasdaily\\gamemath\\Output\\Windows\\Binary\\SoftRendererPlayer.exe)"
+    }
+  ]
+}
