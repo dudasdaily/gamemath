@@ -80,7 +80,7 @@ void SoftRenderer::Update2D(float InDeltaSeconds)
 	elapsedTime = Math::Clamp(elapsedTime + InDeltaSeconds, 0.f, duration);
 
 	// 지정한 시간이 경과하면 새로운 이동 지점을 랜덤하게 설정
-	if (elapsedTime == duration)
+	if (elapsedTime >= duration)
 	{
 		targetStart = targetDestination;
 		targetPosition = targetDestination;
@@ -140,9 +140,25 @@ void SoftRenderer::Render2D()
 	float halfFovSin = 0.f, halfFovCos = 0.f;
 	Math::GetSinCos(halfFovSin, halfFovCos, fovAngle * 0.5f);
 
+	Vector2 normVec = Vector2::UnitY;
+	Vector2 toTargetVec = (targetPosition - playerPosition).GetNormalize();
+
+	if (normVec.Dot(toTargetVec) > halfFovCos)
+	{
+		playerColor = LinearColor::Red;
+		targetColor = LinearColor::Red;
+	}
+	else
+	{
+		playerColor = LinearColor::Gray;
+		targetColor = LinearColor::Blue;
+	}
 	r.DrawLine(playerPosition, playerPosition + Vector2(sightLength * halfFovSin, sightLength * halfFovCos), playerColor);
 	r.DrawLine(playerPosition, playerPosition + Vector2(-sightLength * halfFovSin, sightLength * halfFovCos), playerColor);
 	r.DrawLine(playerPosition, playerPosition + Vector2::UnitY * sightLength * 0.2f, playerColor);
+
+	
+	
 	for (auto const& v : sphere)
 	{
 		r.DrawPoint(v + playerPosition, playerColor);
