@@ -144,9 +144,73 @@ void SoftRenderer::Render2D()
 	for (size_t ti = 0; ti < triangleCount; ++ti)
 	{
 		size_t bi = ti * 3;
-		r.DrawLine(vertices[indices[bi]].Position, vertices[indices[bi + 1]].Position, _WireframeColor);
-		r.DrawLine(vertices[indices[bi]].Position, vertices[indices[bi + 2]].Position, _WireframeColor);
-		r.DrawLine(vertices[indices[bi + 1]].Position, vertices[indices[bi + 2]].Position, _WireframeColor);
+
+		std::array<Vertex2D, 3> tv = {
+			vertices[indices[bi]],
+			vertices[indices[bi + 1]],
+			vertices[indices[bi + 2]],
+		};
+
+		// 무게중심좌표
+		Vector2 u = tv[1].Position - tv[0].Position;
+		Vector2 v = tv[2].Position - tv[0].Position;
+
+		// 공통 분모
+		float udotv = u.Dot(v);
+		float vdotv = v.Dot(v);
+		float udotu = u.Dot(u);
+		float denominator = udotv * udotv - vdotv * udotu;
+
+		if (denominator == 0.f)
+			continue; // 삼각형을 성립하지 않음!
+		
+		float invDenominator = 1.f / denominator; // 분모 정의
+
+		// 삼각형 주변 사각형 구역 정하기
+		Vector2 minPos(Math::Min3(tv[0].Position.X, tv[1].Position.X, tv[2].Position.X), Math::Min3(tv[0].Position.Y, tv[1].Position.Y, tv[2].Position.Y));
+		Vector2 maxPos(Math::Max3 (tv[0].Position.X, tv[1].Position.X, tv[2].Position.X), Math::Max3(tv[0].Position.Y, tv[1].Position.Y, tv[2].Position.Y));
+
+		ScreenPoint lowerLeftPoint = ScreenPoint::ToScreenCoordinate(_ScreenSize, minPos);
+		ScreenPoint upperRightPoint = ScreenPoint::ToScreenCoordinate(_ScreenSize, maxPos);
+
+		// 클램핑 처리
+		//lowerLeftPoint.X = Math::Clamp(lowerLeftPoint.X, 0, _ScreenSize.X);
+		//lowerLeftPoint.Y = Math::Clamp(lowerLeftPoint.Y, 0, _ScreenSize.Y);
+		//upperRightPoint.X = Math::Clamp(upperRightPoint.X, 0, _ScreenSize.X);
+		//upperRightPoint.Y = Math::Clamp(upperRightPoint.Y, 0, _ScreenSize.Y);
+		lowerLeftPoint.X = Math::Max(0, lowerLeftPoint.X);
+		lowerLeftPoint.Y = Math::Min(_ScreenSize.Y, lowerLeftPoint.Y);
+		upperRightPoint.X = Math::Min(_ScreenSize.X, upperRightPoint.X);
+		upperRightPoint.Y = Math::Max(0, upperRightPoint.Y);
+
+
+
+
+		// 구역을 순회
+		for (int x = lowerLeftPoint.X; x <= upperRightPoint.X; x++)
+		{
+			for (int y = upperRightPoint.Y; y <= lowerLeftPoint.Y; y++)
+			{
+				ScreenPoint fragment = ScreenPoint(x, y);
+				Vector2 pointToTest = fragment.ToCartesianCoordinate(_ScreenSize);
+
+				Vector2 w = pointToTest - tv[0].Position;
+
+				float wdotu = w.Dot(u);
+				float wdotv = w.Dot(v);
+
+				float s = (wdotv * udotv - wdotu * vdotv) * invDenominator;
+				float t = (wdotv * udotv - wdotu * udotu) * invDenominator;
+				float oneMinusST = 1.f - s - t;
+
+				bool covexCondition1 = (0.f <= s) && (s <= 1.f);
+				bool covexCondition2 = (0.f <= t) && (t <= 1.f);
+				bool covexCondition3 = (0.f <= oneMinusST) && (oneMinusST <= 1.f);
+
+				if (covexCondition1 && covexCondition2 && covexCondition3)
+					r.DrawPoint(fragment, LinearColor::Cyan);
+			}
+		}
 	}
 
 	// 현재 위치, 크기, 각도를 화면에 출력
