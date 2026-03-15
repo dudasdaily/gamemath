@@ -70,6 +70,25 @@ void SoftRenderer::Update2D(float InDeltaSeconds)
 	static float currentDegree = 0.f;
 	static float rotateSpeed = 180.f;
 	static float distance = 250.f;
+	static std::random_device rd;
+	static std::mt19937 mt(rd());
+	static std::uniform_real_distribution<float> randomY(-200.f, 200.f);
+
+
+	// 6초에 한번씩 선분의 위치를 랜덤하게 옮겨줌
+	elapsedTime = Math::Clamp(elapsedTime + InDeltaSeconds, 0.f, duration);
+	if (elapsedTime >= duration)
+	{
+		lineStart = Vector2(-400.f, randomY(mt));
+		lineEnd = Vector2(400.f, randomY(mt));
+		elapsedTime = 0.f;
+	}
+
+	// 
+	currentDegree = Math::FMod(currentDegree + rotateSpeed * InDeltaSeconds, 360.f);
+	float sin, cos;
+	Math::GetSinCos(sin, cos, currentDegree);
+	point = Vector2(cos, sin) * distance;
 }
 
 // 렌더링 로직을 담당하는 함수
@@ -106,9 +125,24 @@ void SoftRenderer::Render2D()
 		r.DrawPoint(v + point, LinearColor::Red);
 	}
 
+
 	// 투영할 라인 그리기
 	r.DrawLine(lineStart, lineEnd, LinearColor::Black);
 	r.DrawLine(lineStart, point, LinearColor::Red);
+
+	Vector2 u = point - lineStart;
+	Vector2 v = lineEnd - lineStart;
+	Vector2 projV = v * (u.Dot(v) / v.Dot(v));
+	Vector2 projectedPoint = lineStart + projV;
+
+	for (auto const& v : circle)
+	{
+		r.DrawPoint(v + projectedPoint, LinearColor::Blue);
+	}
+
+	// 라인 그리기
+	r.DrawLine(point, projectedPoint, LinearColor::Magenta);
+	r.DrawLine(lineStart, projectedPoint, LinearColor::Magenta);
 }
 
 // 메시를 그리는 함수
