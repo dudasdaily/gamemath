@@ -93,6 +93,23 @@ void SoftRenderer::Render2D()
 	DrawGizmo2D();
 
 	// 메시 데이터의 선언
+	static constexpr float squareHalfSize = 0.5f;
+	static constexpr size_t vertexCount = 4;
+	static constexpr size_t triangleCount = 2;
+
+	// 정점 버퍼
+	static constexpr std::array<Vertex2D, vertexCount> rawVerticies = {
+		Vertex2D(Vector2(-squareHalfSize, squareHalfSize)), // rawVerticies[0] : 왼쪽 위
+		Vertex2D(Vector2(-squareHalfSize, -squareHalfSize)), // rawVerticies[1] : 왼쪽 아래
+		Vertex2D(Vector2(squareHalfSize, squareHalfSize)), // rawVerticies[2] : 오른쪽 위
+		Vertex2D(Vector2(squareHalfSize, -squareHalfSize)) // rawVerticies[3] : 오른쪽 아래
+	};
+
+	// 인덱스 버퍼
+	static constexpr std::array<int, triangleCount * 3> indicies = {
+		 0, 1, 2,
+		 1, 2, 3,
+	};
 
 
 	// 아핀 변환 행렬 ( 크기 ) 
@@ -119,7 +136,30 @@ void SoftRenderer::Render2D()
 	Matrix3x3 finalMatrix = tMatrix * rMatrix * sMatrix;
 
 	// 행렬을 적용한 메시 정보를 사용해 물체를 렌더링
+	//std::array < Vertex2D, vertexCount> vertexies = {
+	//	Vertex2D(finalMatrix * rawVerticies[0].Position),
+	//	Vertex2D(finalMatrix * rawVerticies[1].Position),
+	//	Vertex2D(finalMatrix * rawVerticies[2].Position),
+	//};
 
+	static std::vector<Vertex2D> verticies(vertexCount);
+	for (size_t vi = 0; vi < vertexCount; vi++)
+	{
+		verticies[vi].Position = finalMatrix * rawVerticies[vi].Position;
+	}
+
+	for (size_t t = 0; t < triangleCount; t++)
+	{
+		size_t startIdx = t * 3;
+
+		Vector2 point1 = verticies[indicies[startIdx]].Position;
+		Vector2 point2 = verticies[indicies[startIdx + 1]].Position;
+		Vector2 point3 = verticies[indicies[startIdx + 2]].Position;
+
+		r.DrawLine(point1, point2, LinearColor::Blue);
+		r.DrawLine(point2, point3, LinearColor::Blue);
+		r.DrawLine(point3, point1, LinearColor::Blue);
+	}
 
 	// 현재 위치, 크기, 각도를 화면에 출력
 	r.PushStatisticText(std::string("Position : ") + currentPosition.ToString());
