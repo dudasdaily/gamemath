@@ -200,7 +200,7 @@ void SoftRenderer::Render2D()
 				float wdotv = w.Dot(v);
 
 				float s = (wdotv * udotv - wdotu * vdotv) * invDenominator;
-				float t = (wdotv * udotv - wdotu * udotu) * invDenominator;
+				float t = (wdotu * udotv - wdotv * udotu) * invDenominator;
 				float oneMinusST = 1.f - s - t;
 
 				bool covexCondition1 = (0.f <= s) && (s <= 1.f);
