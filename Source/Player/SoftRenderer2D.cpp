@@ -86,17 +86,33 @@ void SoftRenderer::Update2D(float InDeltaSeconds)
     static float scaleMin = 15.f;
     static float scaleMax = 30.f;
     static float scaleSpeed = 180.f;
+    static float minDistance = 1.f; //
+    static float lerpSpeed = 2.f; // 
 
     // 플레이어에 대한 주요 레퍼런스
     GameObject& goPlayer = g.GetGameObject(PlayerGo);
     TransformComponent& transform = goPlayer.GetTransform();
 
     // 입력에 따른 플레이어 위치와 크기의 변경
-    transform.AddPosition(Vector2(input.GetAxis(InputAxis::XAxis), input.GetAxis(InputAxis::YAxis)).GetNormalize() * moveSpeed * InDeltaSeconds);
     float newScale = Math::Clamp(transform.GetScale().X + scaleSpeed * input.GetAxis(InputAxis::ZAxis) * InDeltaSeconds, scaleMin, scaleMax);
     transform.SetScale(Vector2::One * newScale);
-    transform.AddRotation(input.GetAxis(InputAxis::WAxis) * rotateSpeed * InDeltaSeconds);
+    transform.AddRotation(input.GetAxis(InputAxis::XAxis) * -rotateSpeed * InDeltaSeconds);
+    //transform.AddPosition(Vector2(input.GetAxis(InputAxis::XAxis), input.GetAxis(InputAxis::YAxis)).GetNormalize() * moveSpeed * InDeltaSeconds);
+    transform.AddPosition(transform.GetLocalY() * input.GetAxis(InputAxis::YAxis) * moveSpeed * InDeltaSeconds);
 
+    TransformComponent& cameraTransform = g.GetMainCamera().GetTransform(); // 카메라의 트랜스폼
+
+    Vector2 playerPos = transform.GetPosition(); // 플레이어의 위치
+    Vector2 cameraPos = cameraTransform.GetPosition();
+
+    if ((playerPos - cameraPos).SizeSquared() < minDistance * minDistance)
+        cameraTransform.SetPosition(playerPos); // Lagging효과 구현. dist가 일정 거리 이하이면, 카메라가 플레이어의 위치에 옮겨지고, 그러면 뷰행렬이 플레이어를 원점으로 이동시킬 것임!
+    else
+    {
+        float ratio = Math::Clamp(lerpSpeed * InDeltaSeconds, 0.f, 1.f);
+        Vector2 newCameraPos = cameraPos + (playerPos - cameraPos) * ratio;
+        cameraTransform.SetPosition(newCameraPos);
+    }
 }
 
 // 렌더링 로직을 담당하는 함수
@@ -112,6 +128,7 @@ void SoftRenderer::Render2D()
 
     // 렌더링 로직의 로컬 변수
     size_t totalObjectCount = g.GetScene().size();
+    Matrix3x3 viewMatrix = g.GetMainCamera().GetViewMatrix();
 
     // 씬을 구성하는 모든 게임 오브젝트의 순회
     for (auto it = g.SceneBegin(); it != g.SceneEnd(); ++it)
@@ -126,7 +143,8 @@ void SoftRenderer::Render2D()
         // 렌더링에 필요한 게임 오브젝트의 주요 레퍼런스를 얻기
         const Mesh& mesh = g.GetMesh(gameObject.GetMeshKey());
         const TransformComponent& transform = gameObject.GetTransform();
-        Matrix3x3 finalMatrix = transform.GetModelingMatrix();
+        Matrix3x3 finalMatrix = viewMatrix * transform.GetModelingMatrix();
+
 
         // 게임 오브젝트의 렌더링 수행
         DrawMesh2D(mesh, finalMatrix, gameObject.GetColor());
