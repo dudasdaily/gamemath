@@ -42,9 +42,17 @@ void SoftRenderer::LoadScene3D()
 	// 플레이어
 	constexpr float playerScale = 100.f;
 
-}
+	GameObject& goPlayer = g.CreateNewGameObject(PlayerGo);
+	goPlayer.GetTransform().SetPosition(Vector3::Zero);
+	goPlayer.GetTransform().SetScale(Vector3::One * playerScale);
+	goPlayer.GetTransform().SetRotation(Rotator(0.f, 0.f, 0.f));
+	goPlayer.SetColor(LinearColor::Blue);
 
-// 게임 로직과 렌더링 로직이 공유하는 변수
+	CameraObject& mainCamera = g.GetMainCamera();
+	mainCamera.GetTransform().SetPosition(Vector3(0.f, 0.f, 500.f));
+	mainCamera.GetTransform().SetRotation(Rotator(180.f, 0.f, 0.f));
+}
+	// 게임 로직과 렌더링 로직이 공유하는 변수
 
 // 게임 로직을 담당하는 함수
 void SoftRenderer::Update3D(float InDeltaSeconds)
@@ -61,6 +69,10 @@ void SoftRenderer::Update3D(float InDeltaSeconds)
 	GameObject& goPlayer = g.GetGameObject(PlayerGo);
 	CameraObject& camera = g.GetMainCamera();
 
+	goPlayer.GetTransform().AddPosition(Vector3::UnitZ * (input.GetAxis(InputAxis::ZAxis) * InDeltaSeconds * moveSpeed));
+	goPlayer.GetTransform().AddPitchRotation(-input.GetAxis(InputAxis::WAxis) * rotateSpeed * InDeltaSeconds); // y->z
+	camera.GetTransform().AddYawRotation(input.GetAxis(InputAxis::XAxis) * rotateSpeed * InDeltaSeconds);
+	camera.GetTransform().AddPitchRotation(input.GetAxis(InputAxis::YAxis) * rotateSpeed * InDeltaSeconds);
 }
 
 // 애니메이션 로직을 담당하는 함수
