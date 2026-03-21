@@ -43,6 +43,7 @@ void SoftRenderer::LoadScene3D()
 	constexpr float playerScale = 100.f;
 
 	GameObject& goPlayer = g.CreateNewGameObject(PlayerGo);
+	goPlayer.SetMesh(GameEngine::CubeMesh);
 	goPlayer.GetTransform().SetPosition(Vector3::Zero);
 	goPlayer.GetTransform().SetScale(Vector3::One * playerScale);
 	goPlayer.GetTransform().SetRotation(Rotator(0.f, 0.f, 0.f));
@@ -63,7 +64,7 @@ void SoftRenderer::Update3D(float InDeltaSeconds)
 
 	// 게임 로직의 로컬 변수
 	static float moveSpeed = 500.f;
-	static float rotateSpeed = 180.f;
+	static float rotateSpeed = 90.f;
 
 	// 게임 로직에서 사용할 게임 오브젝트 레퍼런스
 	GameObject& goPlayer = g.GetGameObject(PlayerGo);
